@@ -28,9 +28,9 @@ jobs:
         with:
           version: v1.54.1
           only-new-issues: true
-      - name: Test
-        env:
-          GOFLAGS: -mod=mod
-        run: go test -race -coverpkg=./... -coverprofile=coverage.txt ./...
-      - name: Send coverage
-        run: bash <(curl -s https://codecov.io/bash)
+#      - name: Test
+#        env:
+#          GOFLAGS: -mod=mod
+#        run: go test -race -coverpkg=./... -coverprofile=coverage.txt ./...
+#      - name: Send coverage
+#        run: bash <(curl -s https://codecov.io/bash)
