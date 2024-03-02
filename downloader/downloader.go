@@ -44,6 +44,9 @@ type Options struct {
 	Aria2Token  string
 	Aria2Method string
 	Aria2Addr   string
+
+	// TODO: add ffmpeg path option
+	FfmpegPath string
 }
 
 // Downloader is the default downloader.
