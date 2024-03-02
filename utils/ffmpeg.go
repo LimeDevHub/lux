@@ -23,9 +23,9 @@ func getFfmpegPath() string {
 
 	switch runtime.GOOS {
 	case "windows":
-		ffmpegPath = exeDir + "/ffmpeg.exe"
+		ffmpegPath = filepath.Join(exeDir, "ffmpeg.exe")
 	default:
-		ffmpegPath = exeDir + "/ffmpeg"
+		ffmpegPath = filepath.Join(exeDir + "/ffmpeg")
 	}
 
 	return ffmpegPath
