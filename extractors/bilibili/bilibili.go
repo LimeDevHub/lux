@@ -159,6 +159,7 @@ func extractBangumi(url, html string, extractOption extractors.Options) ([]*extr
 	wgp := utils.NewWaitGroupPool(extractOption.ThreadNumber)
 	dataIndex := 0
 	for index, u := range data.EpList {
+		epIndex := index + 1
 		if !slices.Contains(needDownloadItems, index+1) {
 			continue
 		}
@@ -180,6 +181,7 @@ func extractBangumi(url, html string, extractOption extractors.Options) ([]*extr
 		go func(index int, options bilibiliOptions, extractedData []*extractors.Data) {
 			defer wgp.Done()
 			extractedData[index] = bilibiliDownload(options, extractOption)
+			extractedData[index].Index = epIndex
 		}(dataIndex, options, extractedData)
 		dataIndex++
 	}
@@ -287,6 +289,7 @@ func multiEpisodeDownload(url, html string, extractOption extractors.Options, pa
 	wgp := utils.NewWaitGroupPool(extractOption.ThreadNumber)
 	dataIndex := 0
 	for index, u := range pageData.Sections[0].Episodes {
+		epIndex := index + 1
 		if !slices.Contains(needDownloadItems, index+1) {
 			continue
 		}
@@ -302,6 +305,7 @@ func multiEpisodeDownload(url, html string, extractOption extractors.Options, pa
 		go func(index int, options bilibiliOptions, extractedData []*extractors.Data) {
 			defer wgp.Done()
 			extractedData[index] = bilibiliDownload(options, extractOption)
+			extractedData[index].Index = epIndex
 		}(dataIndex, options, extractedData)
 		dataIndex++
 	}
@@ -316,6 +320,7 @@ func multiPageDownload(url, html string, extractOption extractors.Options, pageD
 	wgp := utils.NewWaitGroupPool(extractOption.ThreadNumber)
 	dataIndex := 0
 	for index, u := range pageData.VideoData.Pages {
+		epIndex := index + 1
 		if !slices.Contains(needDownloadItems, index+1) {
 			continue
 		}
@@ -332,6 +337,7 @@ func multiPageDownload(url, html string, extractOption extractors.Options, pageD
 		go func(index int, options bilibiliOptions, extractedData []*extractors.Data) {
 			defer wgp.Done()
 			extractedData[index] = bilibiliDownload(options, extractOption)
+			extractedData[index].Index = epIndex
 		}(dataIndex, options, extractedData)
 		dataIndex++
 	}

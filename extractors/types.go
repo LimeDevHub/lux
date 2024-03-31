@@ -49,6 +49,7 @@ type Data struct {
 	Site  string   `json:"site"`
 	Title string   `json:"title"`
 	Type  DataType `json:"type"`
+	Index int      `json:"index,omitempty"`
 	// each stream has it's own Parts and Quality
 	Streams map[string]*Stream `json:"streams"`
 	// danmaku, subtitles, etc

@@ -59,6 +59,7 @@ func (e *extractor) Extract(url string, option extractors.Options) ([]*extractor
 	wgp := utils.NewWaitGroupPool(option.ThreadNumber)
 	dataIndex := 0
 	for index, videoEntry := range playlist.Videos {
+		epIndex := index + 1
 		if !slices.Contains(needDownloadItems, index+1) {
 			continue
 		}
@@ -71,6 +72,7 @@ func (e *extractor) Extract(url string, option extractors.Options) ([]*extractor
 				return
 			}
 			extractedData[index] = e.youtubeDownload(url, video)
+			extractedData[index].Index = epIndex
 		}(dataIndex, videoEntry, extractedData)
 		dataIndex++
 	}
