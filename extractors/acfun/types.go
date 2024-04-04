@@ -5,6 +5,7 @@ type episodeData struct {
 	EpisodeName string `json:"episodeName"`
 	BangumiID   int64  `json:"bangumiId"`
 	VideoID     int64  `json:"videoId"`
+	index       int
 }
 
 type bangumiData struct {

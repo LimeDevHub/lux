@@ -51,7 +51,9 @@ func (e *extractor) Extract(URL string, option extractors.Options) ([]*extractor
 		items := utils.NeedDownloadList(option.Items, option.ItemStart, option.ItemEnd, len(list.Episodes))
 
 		for _, item := range items {
-			epDatas = append(epDatas, list.Episodes[item-1])
+			epData := list.Episodes[item-1]
+			epData.index = item
+			epDatas = append(epDatas, epData)
 		}
 	} else {
 		bgData, _, err := resolvingData(html)
@@ -69,7 +71,9 @@ func (e *extractor) Extract(URL string, option extractors.Options) ([]*extractor
 		wgp.Add()
 		go func() {
 			defer wgp.Done()
-			datas = append(datas, extractBangumi(concatURL(t)))
+			data := extractBangumi(concatURL(t))
+			data.Index = t.index
+			datas = append(datas, data)
 		}()
 	}
 	wgp.Wait()
