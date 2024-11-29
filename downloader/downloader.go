@@ -461,7 +461,7 @@ func parseFilePartMeta(filepath string, fileSize int64) (*FilePartMeta, error) {
 		return nil, errors.WithStack(err)
 	}
 	if readSize < size {
-		return nil, errors.Errorf("the file has been broked, please delete all part files and re-download")
+		return nil, errors.Errorf("the file has been broken, please delete all part files and re-download")
 	}
 	err = binary.Read(bytes.NewBuffer(buf[:size]), binary.LittleEndian, meta)
 	if err != nil {
@@ -591,6 +591,13 @@ func (downloader *Downloader) Download(data *extractors.Data) error {
 				stream = data.Streams[s.ID]
 				break
 			}
+			for _, part := range s.Parts {
+				if part.Ext == "m4a" {
+					isFound = true
+					stream = data.Streams[s.ID]
+					break
+				}
+			}
 		}
 		if !isFound {
 			return errors.Errorf("No audio stream found")
@@ -662,6 +669,10 @@ func (downloader *Downloader) Download(data *extractors.Data) error {
 			break
 		}
 
+		if downloader.option.AudioOnly && (part.Ext != "m4a") {
+			continue
+		}
+
 		partFileName := fmt.Sprintf("%s[%d]", title, index)
 		partFilePath, err := utils.FilePath(partFileName, part.Ext, downloader.option.FileNameLength, downloader.option.OutputPath, false)
 		if err != nil {
@@ -691,7 +702,7 @@ func (downloader *Downloader) Download(data *extractors.Data) error {
 	}
 	downloader.bar.Finish()
 
-	if data.Type != extractors.DataTypeVideo {
+	if data.Type != extractors.DataTypeVideo || downloader.option.AudioOnly {
 		return nil
 	}
 
